@@ -1,0 +1,4 @@
+5 // wysokosc
+3 // szerokosc
+6 // liczba wezlow na wysokosc
+4 // liczba wezlow na szerokosc
