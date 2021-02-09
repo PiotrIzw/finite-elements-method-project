@@ -4,7 +4,7 @@ public class Node {
 
     private double x;
     private double y;
-    private static int nNodes;
+    public static int nNodes = 0;
     private int id;
 
     public Node(double x, double y) {

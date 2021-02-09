@@ -10,22 +10,24 @@ public class Main {
 
         /*
         Testing valid grid filling
-         */
+
         GlobalData globalData = new GlobalData(fileDirectory);
         Grid2D grid2D = new Grid2D(globalData);
         grid2D.getLastGridElement();
-
+*/
 
         /*
         Testing valid gauss quadrature integration for:
         -two points integration
         -three points integration
-         */
+
         System.out.println("Two points integration: " + new GaussQuadratureIntegration().calculateTwoPoints());
         System.out.println("Three points integration: " + new GaussQuadratureIntegration().calculateThreePoints());
+ */
 
-
-        new Elem4();
+        GlobalData globalData = new GlobalData(fileDirectory);
+        Grid2D grid2D = new Grid2D(globalData);
+        grid2D.calculateHGlobal();
     }
 
 }

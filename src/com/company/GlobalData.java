@@ -11,7 +11,8 @@ public class GlobalData {
     private int nW; // number of nodes in width
     private int nE; // number of all elements
     private int nN; // number of all nodes
-
+    private static int npc;
+    private static double K;
     public GlobalData(String filePath) {
 
         File file;
@@ -32,6 +33,13 @@ public class GlobalData {
                 scanner.nextLine();
 
                 nW = scanner.nextInt();
+                scanner.nextLine();
+
+                npc = scanner.nextInt();
+                scanner.nextLine();
+
+                K = scanner.nextDouble();
+
             }
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -87,6 +95,14 @@ public class GlobalData {
 
     public void setnN(int nN) {
         this.nN = nN;
+    }
+
+    public static int getNpc() {
+        return npc;
+    }
+
+    public static double getK() {
+        return K;
     }
 }
 

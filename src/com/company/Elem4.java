@@ -11,8 +11,8 @@ public class Elem4 {
 
     private final double[][] jacobiMatrix = new double[4][4];
 
-    private final double[] x = new double[]{0.0, 4.0, 4.0, 0.0};
-    private final double[] y = new double[]{0.0, 0.0, 6.0, 6.0};
+    private double[] x;
+    private double[] y;
 
     private final double[] detJ = new double[4];
 
@@ -21,12 +21,15 @@ public class Elem4 {
 
     public final double[][] hLocal = new double[4][4];
 
-    public Elem4(){
+    public Elem4(double[] x, double[] y, int npc){
+        this.x = x;
+        this.y = y;
+        System.out.println(x[0] + " " + x[1] + " " + x[2] + " " + x[3]);
+        System.out.println(y[0] + " " + y[1] + " " + y[2] + " " + y[3]);
         calculateKsiAndEtaDerivatives();
         calculateJacobiMatrix();
         calculateDetJ();
         calculateInverseJacobiMatrix();
-        calculateHMatrix();
     }
 
     public void calculateKsiAndEtaDerivatives(){
@@ -55,16 +58,21 @@ public class Elem4 {
                 jacobiMatrix[i][2] += etaDerivatives[i][j] * x[j]; // derivative x/eta
                 jacobiMatrix[i][3] += ksiDerivatives[i][j] * y[j]; // derivative y/ksi
             }
+            System.out.println("dxdksi" + jacobiMatrix[0][0]);
         }
 
         System.out.println("Jacobi matrix - integration point nr.1");
         System.out.println("[ " + jacobiMatrix[0][0] + "\t" + jacobiMatrix[0][3] + " ]");
         System.out.println("[ " + jacobiMatrix[0][2] + "\t" + jacobiMatrix[0][1] + " ]");
+
     }
 
     public void calculateDetJ() {
         for (int i = 0; i < detJ.length; i++) {
+                //detJ[i] = (-1) * ((jacobiMatrix[i][0] * jacobiMatrix[i][1]) - ((jacobiMatrix[i][2] * jacobiMatrix[i][3])));
                 detJ[i] = (jacobiMatrix[i][0] * jacobiMatrix[i][1]) - ((jacobiMatrix[i][2] * jacobiMatrix[i][3]));
+
+
         }
 
         System.out.println("Matrix detJ determinants - integration points 1 - 4");
@@ -109,7 +117,7 @@ public class Elem4 {
     }
 
 
-    public void calculateHMatrix() {
+    public double[][] calculateHMatrix() {
         double[][] tempMatrixDx = new double[4][4];
         double[][] tempMatrixDy = new double[4][4];
 
@@ -120,7 +128,7 @@ public class Elem4 {
                 for (int j = 0; j < 4; j++) {
                     tempMatrixDx[i][j] = dNAfterDX[k][i] * dNAfterDX[k][j];
                     tempMatrixDy[i][j] = dNAfterDY[k][i] * dNAfterDY[k][j];
-                    hMatrix[i][j] = 30 * (tempMatrixDx[i][j] + tempMatrixDy[i][j]) * detJ[i];
+                    hMatrix[i][j] = GlobalData.getK() * (tempMatrixDx[i][j] + tempMatrixDy[i][j]) * detJ[i];
                 }
             }
 
@@ -134,9 +142,10 @@ public class Elem4 {
         System.out.println("H matrix local");
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    System.out.print(hLocal[i][j] + " ");
+                    System.out.printf("%.2f\t", hLocal[i][j]);
                 }
                 System.out.println();
             }
+            return hLocal;
     }
 }
