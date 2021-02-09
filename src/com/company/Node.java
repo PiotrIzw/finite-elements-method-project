@@ -4,12 +4,14 @@ public class Node {
 
     private double x;
     private double y;
-    private int nNodes;
+    private static int nNodes;
+    private int id;
 
     public Node(double x, double y) {
         this.x = x;
         this.y = y;
         nNodes++;
+        this.id = Node.nNodes;
     }
 
     public double getX() {
@@ -35,4 +37,10 @@ public class Node {
     public void setnNodes(int nNodes) {
         this.nNodes = nNodes;
     }
+
+    public int getId() {
+        return id;
+    }
 }
+
+

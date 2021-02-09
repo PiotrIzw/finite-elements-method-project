@@ -1,4 +1,6 @@
-package com.company;
+package com.company.integration;
+
+import com.company.Node;
 
 import java.util.ArrayList;
 import java.util.List;

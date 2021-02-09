@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.integration.GaussQuadratureIntegration;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -22,6 +24,8 @@ public class Main {
         System.out.println("Two points integration: " + new GaussQuadratureIntegration().calculateTwoPoints());
         System.out.println("Three points integration: " + new GaussQuadratureIntegration().calculateThreePoints());
 
+
+        new Elem4();
     }
 
 }

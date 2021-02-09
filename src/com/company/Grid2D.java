@@ -7,9 +7,14 @@ public class Grid2D {
     private List<Element> allElements = new ArrayList<>();
     private List<Node> allNodes = new ArrayList<>();
     private GlobalData globalData;
+    private double H[][];
 
     public Grid2D(GlobalData globalData) {
         this.globalData = globalData;
+
+        H = new double[globalData.getnN()][globalData.getnN()];
+
+
         calculateNodes();
         saveElementsWithNodes();
     }
@@ -63,5 +68,16 @@ public class Grid2D {
 
 
 
+    }
+
+    public void calculateHGlobal() {
+        for (int i = 0; i < allElements.size(); i++) {
+            for (int j = 0; j < allElements.get(i).getNodes().size(); j++) {
+                for (int k = 0; k < allElements.get(i).getNodes().size(); k++) {
+                    H[allElements.get(i).getNodes().get(j).getId() - 1][allElements.get(i).getNodes().get(k).getId() - 1] += allElements.get(i).HLocal[j][k];
+                }
+            }
+        }
+        printMatrix(H);
     }
 }
