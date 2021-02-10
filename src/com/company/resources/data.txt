@@ -2,5 +2,5 @@
 0,1 // szerokosc
 4 // liczba wezlow na wysokosc
 4 // liczba wezlow na szerokosc
-4 //liczba punktow calkowania
+2 // liczba punktow calkowania
 25 // k, wspolczynnik przewodzenia ciepla
