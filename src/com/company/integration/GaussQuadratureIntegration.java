@@ -7,21 +7,46 @@ import java.util.List;
 
 public class GaussQuadratureIntegration {
 
+    private class IntegrationNode{
+        double x,y;
+
+        public IntegrationNode(double x, double y){
+            this.x = x;
+            this.y = y;
+        }
+
+        public double getX() {
+            return x;
+        }
+
+        public void setX(double x) {
+            this.x = x;
+        }
+
+        public double getY() {
+            return y;
+        }
+
+        public void setY(double y) {
+            this.y = y;
+        }
+    }
+
 
     public double calculateTwoPoints(){
 
         double point = 1.0 / Math.sqrt(3.0);
 
-        List<Node> integrationPoints = new ArrayList<>();
+        List<IntegrationNode> integrationPoints = new ArrayList<>();
 
-        integrationPoints.add(new Node(-point, -point));
-        integrationPoints.add(new Node(point, -point));
-        integrationPoints.add(new Node(point, point));
-        integrationPoints.add(new Node(-point, point));
+        integrationPoints.add(new IntegrationNode(-point, -point));
+        integrationPoints.add(new IntegrationNode(point, -point));
+        integrationPoints.add(new IntegrationNode(point, point));
+        integrationPoints.add(new IntegrationNode(-point, point));
 
         double result = 0.0;
 
-        for(Node node : integrationPoints){
+        for(IntegrationNode node : integrationPoints){
             double x = node.getX();
             double y = node.getY();
 
@@ -39,23 +64,23 @@ public class GaussQuadratureIntegration {
         double weight1 = 5.0/9.0;
         double weight2 = 8.0/9.0;
 
-        List<Node> integrationPoints = new ArrayList<>();
+        List<IntegrationNode> integrationPoints = new ArrayList<>();
 
-        integrationPoints.add(new Node(-point, -point));
-        integrationPoints.add(new Node(0, -point));
-        integrationPoints.add(new Node(point, -point));
+        integrationPoints.add(new IntegrationNode(-point, -point));
+        integrationPoints.add(new IntegrationNode(0, -point));
+        integrationPoints.add(new IntegrationNode(point, -point));
 
-        integrationPoints.add(new Node(-point, 0));
-        integrationPoints.add(new Node(0, 0));
-        integrationPoints.add(new Node(point, 0));
+        integrationPoints.add(new IntegrationNode(-point, 0));
+        integrationPoints.add(new IntegrationNode(0, 0));
+        integrationPoints.add(new IntegrationNode(point, 0));
 
-        integrationPoints.add(new Node(-point, point));
-        integrationPoints.add(new Node(0, point));
-        integrationPoints.add(new Node(point, point));
+        integrationPoints.add(new IntegrationNode(-point, point));
+        integrationPoints.add(new IntegrationNode(0, point));
+        integrationPoints.add(new IntegrationNode(point, point));
 
         double result = 0.0;
 
-        for(Node node : integrationPoints){
+        for(IntegrationNode node : integrationPoints){
             double x = node.getX();
             double y = node.getY();
 

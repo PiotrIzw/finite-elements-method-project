@@ -8,12 +8,13 @@ public class Grid2D {
     private List<Node> allNodes = new ArrayList<>();
     private GlobalData globalData;
     private double H[][];
+    private double C[][];
 
     public Grid2D(GlobalData globalData) {
         this.globalData = globalData;
 
         H = new double[globalData.getnN()][globalData.getnN()];
-
+        C = new double[globalData.getnN()][globalData.getnN()];
 
         calculateNodes();
         saveElementsWithNodes();
@@ -40,7 +41,7 @@ public class Grid2D {
                // System.out.println(globalData.getnW() + " " + globalData.getnH());
                 double nodeX = x + (i * (globalData.getW() / (globalData.getnW() - 1)));
                 double nodeY = y + (j * (globalData.getH() / (globalData.getnH() - 1)));
-                allNodes.add(new Node(nodeX, nodeY));
+                allNodes.add(new Node(nodeX, nodeY, GlobalData.getT0()));
 
                // System.out.println("x = " + nodeX + "; y =" + nodeY);
             }
@@ -74,10 +75,23 @@ public class Grid2D {
         printMatrix(H);
     }
 
+    public void calculateCGlobal(){
+
+        for (int i = 0; i < allElements.size(); i++) {
+            for (int j = 0; j < allElements.get(i).getNodes().size(); j++) {
+                for (int k = 0; k < allElements.get(i).getNodes().size(); k++) {
+                    C[allElements.get(i).getNodes().get(j).getId() - 1][allElements.get(i).getNodes().get(k).getId() - 1] += allElements.get(i).getCLocal()[j][k];
+                }
+            }
+        }
+        printMatrix(C);
+    }
+
     public void printMatrix(double[][] matrix){
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                System.out.printf("%.4f\t\t", matrix[i][j]);
+                //if(matrix[i][j] == 0) System.out.format("0 ");
+                System.out.format("%11f%4s", matrix[i][j], "");
             }
             System.out.println();
         }

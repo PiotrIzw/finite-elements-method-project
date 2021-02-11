@@ -20,19 +20,22 @@ public class Elem4 {
     private final double[][] dNAfterDX;
     private final double[][] dNAfterDY;
 
-    public final double[][] hLocal;
+    private final double[][] hLocal;
 
-    public Elem4(double[] x, double[] y, int npc){
+    private double[][] N;
+
+
+    public Elem4(double[] x, double[] y, int integrationSchema){
         this.x = x;
         this.y = y;
 
-        if(npc == 2) {
+        if(integrationSchema == 2) {
             wages = new double[]{1, 1};
             point = 1.0 / Math.sqrt(3.0);
             ksi = new double[]{-point, point, point, -point};
             eta = new double[]{-point, -point, point, point};
         }
-        else if(npc == 3) {
+        else if(integrationSchema == 3) {
             wages = new double[]{5.0 / 9.0, 8.0 / 9.0, 5.0 / 9.0};
             point = -Math.sqrt(3.0 / 5.0);
             point2 = 0.0;
@@ -40,7 +43,7 @@ public class Elem4 {
             ksi = new double[]{point, point2, point3, point, point2, point3, point, point2, point3};
             eta = new double[]{point, point, point, point2, point2, point2, point3, point3, point3};
         }
-        else if(npc == 4) {
+        else if(integrationSchema == 4) {
             wages = new double[]{((18.0 - Math.sqrt(30)) / 36.0), (18.0 + Math.sqrt(30.0)) / 36.0, (18.0 + Math.sqrt(30.0)) / 36.0, (18.0 - Math.sqrt(30.0)) / 36.0};
             point = Math.sqrt((3.0 / 7.0) - (2.0 / 7.0) * Math.sqrt(6.0 / 5.0));
             point2 = Math.sqrt((3.0 / 7.0) + (2.0 / 7.0) * Math.sqrt(6.0 / 5.0));
@@ -59,7 +62,7 @@ public class Elem4 {
 
         }
         else{
-            System.err.println("Wrong npc size.");
+            System.err.println("Wrong integrationSchema size.");
             System.exit(0);
         }
         detJ = new double[ksi.length];
@@ -70,9 +73,12 @@ public class Elem4 {
         dNAfterDY = new double[ksi.length][x.length];
         hLocal = new double[ksi.length][x.length];
 
+        N = new double[ksi.length][x.length];
+
         calculateKsiAndEtaDerivatives();
         calculateJacobiMatrix();
         calculateDetJ();
+        calculateShapeFunctions();
         calculateInverseJacobiMatrix();
     }
 
@@ -94,6 +100,16 @@ public class Elem4 {
 
             System.out.println(ksiDerivatives[i][0] + "\t" + ksiDerivatives[i][1] + "\t" + ksiDerivatives[i][2] + "\t" + ksiDerivatives[i][3]);
             //System.out.println(etaDerivatives[i][0] + "\t" + etaDerivatives[i][1] + "\t" + etaDerivatives[i][2] + "\t" + etaDerivatives[i][3]);
+        }
+    }
+
+    private void calculateShapeFunctions() {
+        // Obliczanie funkcji kształtu
+        for (int i = 0; i < ksi.length; i++) {
+            N[i][0] = 0.25 * (1.0 - ksi[i]) * (1 - eta[i]);
+            N[i][1] = 0.25 * (1.0 + ksi[i]) * (1 - eta[i]);
+            N[i][2] = 0.25 * (1.0 + ksi[i]) * (1 + eta[i]);
+            N[i][3] = 0.25 * (1.0 - ksi[i]) * (1 + eta[i]);
         }
     }
 
@@ -184,7 +200,7 @@ public class Elem4 {
         System.out.println("H matrix local");
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    System.out.printf("%.2f\t", hLocal[i][j]);
+                    System.out.print(hLocal[i][j] + " ");
                 }
                 System.out.println();
             }
@@ -192,11 +208,44 @@ public class Elem4 {
     }
 
 
+    public double[][] calculateCMatrix() {
+        double[][] tempMatrixN = new double[4][4];
+
+        double[][] cMatrix = new double[4][4];
+        double[] matrixWages = calculateWages();
+
+        double[][] cMatrixLocal = new double[4][4];
+
+        for(int k = 0; k < ksi.length; k++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    tempMatrixN[i][j] = N[k][i] * N[k][j];
+                    cMatrix[i][j] = GlobalData.getRo() * GlobalData.getCp() * tempMatrixN[i][j] * detJ[i];
+                }
+            }
+
+            for (int y = 0; y < 4; y++) {
+                for(int z = 0; z < 4; z++) {
+                    cMatrixLocal[z][y] += cMatrix[z][y] * matrixWages[k];
+                }
+            }
+        }
+        System.out.println();
+        System.out.println("C matrix local");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(cMatrixLocal[i][j] + " ");
+            }
+            System.out.println();
+        }
+        return cMatrixLocal;
+    }
+
     private double[] calculateWages() {
         double[] tempWages = new double[ksi.length];
         int index = 0;
-        for (int i = 0; i < GlobalData.getNpc(); i++) {
-            for (int j = 0; j < GlobalData.getNpc(); j++) {
+        for (int i = 0; i < GlobalData.getIntegrationSchema(); i++) {
+            for (int j = 0; j < GlobalData.getIntegrationSchema(); j++) {
                 tempWages[index] = wages[i] * wages[j];
                 index++;
             }

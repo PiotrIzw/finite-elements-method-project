@@ -11,8 +11,12 @@ public class GlobalData {
     private int nW; // number of nodes in width
     private int nE; // number of all elements
     private int nN; // number of all nodes
-    private static int npc;
+    private static int integrationSchema; //integration schema 2, 3, 4 points
     private static double K;
+    public static double ro;
+    public static double cp;
+    public static double t0;
+
     public GlobalData(String filePath) {
 
         File file;
@@ -35,11 +39,19 @@ public class GlobalData {
                 nW = scanner.nextInt();
                 scanner.nextLine();
 
-                npc = scanner.nextInt();
+                integrationSchema = scanner.nextInt();
                 scanner.nextLine();
 
                 K = scanner.nextDouble();
+                scanner.nextLine();
 
+                ro = scanner.nextDouble();
+                scanner.nextLine();
+
+                cp = scanner.nextDouble();
+                scanner.nextLine();
+
+                t0 = scanner.nextDouble();
             }
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -97,12 +109,24 @@ public class GlobalData {
         this.nN = nN;
     }
 
-    public static int getNpc() {
-        return npc;
+    public static int getIntegrationSchema() {
+        return integrationSchema;
     }
 
     public static double getK() {
         return K;
+    }
+
+    public static double getRo() {
+        return ro;
+    }
+
+    public static double getCp() {
+        return cp;
+    }
+
+    public static double getT0() {
+        return t0;
     }
 }
 

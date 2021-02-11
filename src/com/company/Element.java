@@ -7,6 +7,7 @@ public class Element {
     private List<Node> nodes;
     public static int elements = 0;
     private double[][] HLocal;
+    private double[][] CLocal;
 
     public Element(List<Node> nodes) {
         this.nodes = nodes;
@@ -23,8 +24,9 @@ public class Element {
             y[j] = nodes.get(j).getY();
         }
 
-        Elem4 elem4 = new Elem4(x, y, GlobalData.getNpc());
+        Elem4 elem4 = new Elem4(x, y, GlobalData.getIntegrationSchema());
         HLocal = elem4.calculateHMatrix();
+        CLocal = elem4.calculateCMatrix();
 
     }
 
@@ -44,5 +46,9 @@ public class Element {
 
     public double[][] getHLocal() {
         return HLocal;
+    }
+
+    public double[][] getCLocal() {
+        return CLocal;
     }
 }

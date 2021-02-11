@@ -6,12 +6,14 @@ public class Node {
     private double y;
     public static int nNodes = 0;
     private int id;
+    private double t0;
 
-    public Node(double x, double y) {
+    public Node(double x, double y, double t0) {
         this.x = x;
         this.y = y;
         nNodes++;
         this.id = Node.nNodes;
+        this.t0 = t0;
     }
 
     public double getX() {
@@ -40,6 +42,10 @@ public class Node {
 
     public int getId() {
         return id;
+    }
+
+    public double getT0() {
+        return t0;
     }
 }
 

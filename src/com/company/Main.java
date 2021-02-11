@@ -27,7 +27,10 @@ public class Main {
 
         GlobalData globalData = new GlobalData(fileDirectory);
         Grid2D grid2D = new Grid2D(globalData);
+        System.out.println("H Global");
         grid2D.calculateHGlobal();
+        System.out.println("C Global");
+        grid2D.calculateCGlobal();
     }
 
 }
